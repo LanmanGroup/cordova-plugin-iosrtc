@@ -872,6 +872,32 @@ class iosrtcPlugin : CDVPlugin {
 		}
 	}
 
+	func screen(_ command: CDVInvokedUrlCommand){
+        for (_, value) in self.pluginMediaStreamRenderers {
+            if(value.elementView.layer.zPosition == CGFloat(-2)){                UIGraphicsBeginImageContextWithOptions(value.elementView.bounds.size, value.elementView.isOpaque, 0.0)
+                value.elementView.drawHierarchy(in: value.elementView.bounds, afterScreenUpdates: false)
+                let snapshotImageFromMyView = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                
+                let image = snapshotImageFromMyView,
+                rect = CGRect(origin: CGPoint(x: (value.elementView.bounds.size.width - value.videoView.frame.width)/2, y: 0), size: CGSize(width: value.videoView.frame.width, height: value.videoView.frame.height));
+            
+                // otherwise, grab specified `rect` of image
+                
+                let scale = image?.scale
+                let scaledRect = CGRect(x: rect.origin.x * scale!, y: rect.origin.y * scale!, width: rect.size.width * scale!, height: rect.size.height * scale!)
+                let cgImage = image?.cgImage?.cropping(to: scaledRect)
+                let newImage: UIImage = UIImage(cgImage: cgImage!, scale: scale!, orientation: .up)
+                
+               
+                
+                let imageData : Data = UIImagePNGRepresentation(newImage)! as Data
+                let imageBase64 = imageData.base64EncodedString(options: Data.Base64EncodingOptions.init(rawValue: 0));
+
+                self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: imageBase64 ?? "no"), callbackId: command.callbackId)
+            }
+        }
+    }
 
 	/**
 	 * Private API.
