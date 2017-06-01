@@ -2548,17 +2548,17 @@ function dump() {
 	exec(null, null, 'iosrtcPlugin', 'dump', []);
 }
 
-function takeScreenShot(onResultOK,onResultError) {
+function takeScreenShot(okCallBack,errorCallBack) {
     debug('takeScreenShot');
-	
+
 	function onResultOK(data) {
-		onResultOK(data)
+    	okCallBack(data)
 	}
-	
+
 	function onResultError(error) {
-		onResultError(error)
+    	errorCallBack(error)
 	}
-	
+
 	exec(onResultOK, onResultError, 'iosrtcPlugin', 'screen', []);
  };
 	
