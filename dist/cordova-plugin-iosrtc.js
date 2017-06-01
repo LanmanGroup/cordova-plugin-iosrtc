@@ -2492,7 +2492,10 @@ module.exports = {
 	debug:                 _dereq_('debug'),
 
 	// Debug function to see what happens internally.
-	dump:                  dump
+	dump:                  dump,
+	
+	// Take screenshot of remote stream
+  	takeScreenShot:        takeScreenShot
 };
 
 
@@ -2545,6 +2548,21 @@ function dump() {
 	exec(null, null, 'iosrtcPlugin', 'dump', []);
 }
 
+function takeScreenShot(onResultOK,onResultError) {
+    debug('takeScreenShot');
+	
+	function onResultOK(data) {
+		onResultOK(data)
+	}
+	
+	function onResultError(error) {
+		onResultError(error)
+	}
+	
+	exec(onResultOK, onResultError, 'iosrtcPlugin', 'screen', []);
+ };
+	
+	
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./MediaStream":3,"./MediaStreamTrack":5,"./RTCIceCandidate":8,"./RTCPeerConnection":9,"./RTCSessionDescription":10,"./enumerateDevices":13,"./getUserMedia":14,"./videoElementsHandler":16,"cordova/exec":undefined,"debug":17,"domready":19}],16:[function(_dereq_,module,exports){
 (function (global){
